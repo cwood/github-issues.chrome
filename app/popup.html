@@ -1,0 +1,21 @@
+<!doctype html>
+<html ng-csp>
+	<head>
+		<link href='http://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+		<link href="styles/main.css" rel="stylesheet">
+		<script src="bower_components/angular/angular.js"></script>
+		<script src="bower_components/angular-animate/angular-animate.js"></script>
+		<script src="bower_components/angular-route/angular-route.js"></script>
+		<script src="bower_components/angular-resource/angular-resource.js"></script>
+		<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+		<script src="bower_components/showdown/src/showdown.js"></script>
+		<script src="bower_components/showdown/src/extensions/github.js"></script>
+		<!-- build:js scripts/popup.js -->
+		<script src="scripts/popup.js"></script>
+		<!-- endbuild -->
+	</head>
+	<body ng-cloak>
+		<header><a href="/popup.html"><img src="images/octocat.svg" class='github-logo' />Github Issues for {{domain}}</a></header>
+		<div class='site-container' ng-view></div>
+	</body>
+</html>

@@ -1,0 +1,54 @@
+@import "../bower_components/bedrock/bedrock";
+@import "modules/list";
+@import "modules/detail";
+
+html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	font-family: 'Muli', sans-serif;
+	font-size: 100%;
+}
+
+body {
+	min-width: 380px;
+	max-height: 680px;
+	background: white;
+	border-radius: 5px;
+	padding: 0;
+	background: #f8f8f8;
+}
+
+header {
+	background: gray;
+	text-align: center;
+	line-height: 25px;
+	padding: 5px 0;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+
+	.github-logo {
+		.size(25px);
+		float: left;
+		margin-left: 5px;
+	}
+
+	a {
+		color: white;
+	}
+
+	a:focus {
+		outline: -webkit-focus-ring-color none;
+	}
+}
+
+.site-container {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}

@@ -1,0 +1,29 @@
+<div class='issue issue-full'>
+	<nav class='detail-bar'>
+		<ul>
+			<li class='back-button'><a href="popup.html">Back</a></li>
+			<li class='toggle-state' ng-click="toggleOpen(issue)">{{issue.state}}</li>
+			<li class='github-link'><a href="{{issue.url}}">Full Issue</a></li>
+		</ul>
+	</nav>
+
+	<header>{{issue.title}}</header>
+
+	<ul class='header'>
+		<li class='reported-by'>
+			<i>Opened by</i> {{issue.user.login}}
+			<img src="{{issue.user.avatar_url}}" />
+			<i class='created'>Created on: {{issue.created_at|date:medium}}</i>
+		</li>
+	</ul>
+
+	<ul class='comments'>
+		<li ng-repeat="post in posts">
+			<markdown>{{post.body}}</markdown>
+			<ul>
+				<li><i>By: {{post.user.login}}</i></li>
+				<li>{{post.created_at|date:medium}}</li>
+			</ul>
+		</li>
+	</ul>
+</div>

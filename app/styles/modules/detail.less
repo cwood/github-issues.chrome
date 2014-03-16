@@ -1,0 +1,75 @@
+.issue-full {
+	ul {
+		.unstyle-list();
+
+		li {
+			display: inline-block;
+		}
+	}
+
+	.detail-bar {
+		background: lighten(#000, 30%);
+		color: white;
+		line-height: 20px;
+
+		a {
+			color: inherit;
+		}
+
+		li {
+			width: 32%;
+			text-align: center;
+			text-transform: uppercase;
+
+			&:first-child {
+				text-align: left;
+			}
+			&:last-child {
+				text-align: right;
+			}
+		}
+	}
+
+	header {
+		color: white;
+		text-align: left;
+		margin-top: 10px;
+		font-size: 90%;
+	}
+
+	.header {
+
+		li {
+			height: 20px;
+		}
+
+		.reported-by img {
+			.size(20px);
+		}
+
+		.created {
+			font-size: 60%;
+		}
+
+		.number {
+			float: right;
+		}
+	}
+
+	.comments {
+		margin-top: 10px;
+
+		> li {
+			border-top: 1px solid black;
+			margin-top: 15px;
+
+			ul li {
+				display: inline-block;
+			}
+
+			ul {
+				float: right;
+			}
+		}
+	}
+}
