@@ -9,9 +9,12 @@ issuesApp = angular.module 'issuesApp', ['ngAnimate', 'ngSanitize', 'ngRoute', '
       controller: "IssueDetailCtrl"
       templateUrl: "/partials/detail.html"
 
+    username = localStorage['username']
+    token = localStorage['access_token']
+
     $locationProvider.html5Mode(true)
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/)
-    $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + window.btoa(username + token)
+    $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + window.btoa(username + ':' + token)
 
 issuesApp.run ($rootScope) ->
 
@@ -31,6 +34,12 @@ issuesApp.controller 'IssuesListCtrl', ($scope, $rootScope, $resource, $routePar
   chrome.browserAction.setBadgeText
     text: $scope.issues.length.toString()
 
+issuesApp.filter 'markdown', ($sanitize) ->
+  (input) ->
+    converter = new Showdown.converter
+      extensions: ['github']
+    return converter.makeHtml((input))
+
 issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $animate) ->
 
   States =
@@ -41,27 +50,20 @@ issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $anima
     {issueId: $routeParams.issueId})
   $scope.issue = issue.get()
 
+  $scope.createTab = (url) ->
+    chrome.tabs.create
+      url: url
+
   $scope.toggleOpen = (issue) ->
     issue = $resource("https://api.github.com/repos/hzdg/rainbowroom.com/issues/:issueId",
       {issueId: $routeParams.issueId})
-    currenIssue = issue.get()
+    currentIssue = issue.get()
     issue.patch
-      state: State.closed if currentIssue.state is States.open else State.open
+      state: States.closed if currentIssue.state == States.open else States.open
 
   comments = $resource("https://api.github.com/repos/hzdg/rainbowroom.com/issues/:issueId/comments",
     {issueId: $routeParams.issueId})
   $scope.posts = comments.query()
-
-  $scope.toHtml = (markdown) ->
-    markdown.toHtml(markdown)
-
-issuesApp.directive 'markdown', ($sanitize) ->
-  restrict: 'E'
-  link: (scope, element) ->
-    converter = new Showdown.converter
-      extensions: ['github']
-    html = $sanitize(converter.makeHtml(scope.issue))
-    element.html(html)
 
 angular.element(document).ready ->
 	angular.bootstrap document, ['issuesApp']
