@@ -13,13 +13,8 @@
         "https://api.github.com/*"
     ],
     "background": {
-        "scripts": [
-            "bower_components/angular/angular.js",
-            "bower_components/angular-resource/angular-resource.js",
-            "bower_components/angular-route/angular-route.js",
-            "scripts/background.js"
-        ]
-    },
+		"page": "background.html"
+	},
     "browser_action": {
         "default_icon": {
             "19": "images/icon-19.png",
