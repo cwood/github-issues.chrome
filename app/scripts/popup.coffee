@@ -24,15 +24,17 @@ issuesApp.run ($rootScope) ->
 
     url = angular.element('<a />')
     url.attr('href', tabs[0].url)
-    $rootScope.domain = url[0].host
+    $rootScope.domain = localStorage['repo_full_name']
 
 issuesApp.controller 'IssuesListCtrl', ($scope, $rootScope, $resource, $routeParams, $animate, $location) ->
 
-  Issues = $resource("https://api.github.com/repos/hzdg/rainbowroom.com/issues")
+  Issues = $resource(localStorage['repo_endpoint'] + "/issues")
   $scope.issues = Issues.query()
 
-  chrome.browserAction.setBadgeText
-    text: $scope.issues.length.toString()
+  $scope.issues.$promise.then (issues) ->
+    console.log issues
+    chrome.browserAction.setBadgeText
+      text: issues.length
 
 issuesApp.filter 'markdown', ($sanitize) ->
   (input) ->
@@ -46,7 +48,7 @@ issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $anima
     open: 'open'
     closed: 'closed'
 
-  issue = $resource("https://api.github.com/repos/hzdg/rainbowroom.com/issues/:issueId",
+  issue = $resource(localStorage['repo_endpoint'] + "/issues/:issueId",
     {issueId: $routeParams.issueId})
   $scope.issue = issue.get()
 
@@ -55,13 +57,13 @@ issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $anima
       url: url
 
   $scope.toggleOpen = (issue) ->
-    issue = $resource("https://api.github.com/repos/hzdg/rainbowroom.com/issues/:issueId",
+    issue = $resource(localStorage['repo_endpoint'] + "/issues/:issueId",
       {issueId: $routeParams.issueId})
     currentIssue = issue.get()
     issue.patch
       state: States.closed if currentIssue.state == States.open else States.open
 
-  comments = $resource("https://api.github.com/repos/hzdg/rainbowroom.com/issues/:issueId/comments",
+  comments = $resource(localStorage['repo_endpoint'] + "/issues/:issueId/comments",
     {issueId: $routeParams.issueId})
   $scope.posts = comments.query()
 
