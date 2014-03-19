@@ -1,3 +1,5 @@
+<input ng-model='titleSearch' type='text' placeholder='Filter with ...' class='search-input'></input>
+
 <table class='issues-list'>
 	<tr class='header'>
 		<th ng-click='filterWith = "number"'>#</th>
@@ -5,7 +7,7 @@
 		<th ng-click='filterWidth = "user.name"'>User</th>
 		<th ng-click='filterWidth = "assignee.name"'>Assigned</th>
 	</tr>
-	<tr ng-repeat="issue in issues | orderBy: filterWith" class='issue'>
+	<tr ng-repeat="issue in issues | orderBy: filterWith | filter: titleSearch" class='issue'>
 		<td class="number"><a ng-href="/popup.html/{{issue.number}}">{{issue.number}}</a></td>
 		<td class="title"><a ng-href="/popup.html/{{issue.number}}">{{issue.title}}</a></td>
 		<td class="reported-by"><img src="{{issue.user.avatar_url}}" /></td>
