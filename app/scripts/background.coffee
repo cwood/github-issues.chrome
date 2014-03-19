@@ -12,26 +12,41 @@ issuesBg.controller 'BackgroundCtrl', ($scope, $resource) ->
 
   orgs = userOrgs.query()
 
+  updateRepo = (url) ->
+    urlParts = url.replace('http://', '').replace('www.', '').trim().split('.')
+    queryString = "user:" + localStorage['username'] + ' '
+    firstSection = urlParts[0]
+
+    for org in orgs
+      queryString += "user:" + org.login + " "
+
+    queryString = queryString + firstSection
+
+    searchResource = $resource("https://api.github.com/search/repositories", {
+      q: queryString
+    })
+
+    searchResource.get().$promise.then (results) ->
+      if results.items.length <= 4 and results.items.length != 0
+        localStorage['repo_full_name'] = results.items[0].full_name
+        localStorage['repo_endpoint'] = results.items[0].url
+
+        issuesList = $resource(localStorage['repo_endpoint'] + '/issues')
+
+        issuesList.query().$promise.then (issues) ->
+          chrome.browserAction.setBadgeText
+            text: issues.length.toString()
+
+
+  chrome.tabs.onActivated.addListener (activeInfo) ->
+    chrome.tabs.get activeInfo.tabId, (tabInfo) ->
+      if angular.isDefined(tabInfo.url)
+        updateRepo(tabInfo.url)
+
   chrome.tabs.onUpdated.addListener (tabId, changeInfo) ->
     if angular.isDefined(changeInfo.url)
+      updateRepo(changeInfo.url)
 
-      firstSection = changeInfo.url.replace('http://', '').split('.')[0]
-      queryString = "user:" + localStorage['username'] + ' '
-
-      for org in orgs
-        queryString += "user:" + org.login + " "
-
-      queryString = queryString + firstSection
-
-      searchResource = $resource("https://api.github.com/search/repositories", {
-        q: queryString
-      })
-
-      searchResource.get().$promise.then (results) ->
-        console.log results
-        if results.items.length <= 4 and results.items.length != 0
-          localStorage['repo_full_name'] = results.items[0].full_name
-          localStorage['repo_endpoint'] = results.items[0].url
 
 angular.element(document).ready ->
   angular.bootstrap document, ['issuesBg']
