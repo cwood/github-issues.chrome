@@ -27,15 +27,19 @@ issuesBg.controller 'BackgroundCtrl', ($scope, $resource) ->
     })
 
     searchResource.get().$promise.then (results) ->
-      if results.items.length <= 4 and results.items.length != 0
-        localStorage['repo_full_name'] = results.items[0].full_name
-        localStorage['repo_endpoint'] = results.items[0].url
+      for result in results.items
+        console.log result.name
+        if result.name.match(/\.\w+$/)
+          console.log result.name
+          localStorage['repo_full_name'] = result.full_name
+          localStorage['repo_endpoint'] = result.url
 
-        issuesList = $resource(localStorage['repo_endpoint'] + '/issues')
+          issuesList = $resource(localStorage['repo_endpoint'] + '/issues')
 
-        issuesList.query().$promise.then (issues) ->
-          chrome.browserAction.setBadgeText
-            text: issues.length.toString()
+          issuesList.query().$promise.then (issues) ->
+            chrome.browserAction.setBadgeText
+              text: issues.length.toString()
+          break
 
 
   chrome.tabs.onActivated.addListener (activeInfo) ->
