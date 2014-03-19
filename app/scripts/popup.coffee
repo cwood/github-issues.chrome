@@ -32,7 +32,6 @@ issuesApp.controller 'IssuesListCtrl', ($scope, $rootScope, $resource, $routePar
   $scope.issues = Issues.query()
 
   $scope.issues.$promise.then (issues) ->
-    console.log issues
     chrome.browserAction.setBadgeText
       text: issues.length.toString()
 
@@ -66,6 +65,10 @@ issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $anima
   comments = $resource(localStorage['repo_endpoint'] + "/issues/:issueId/comments",
     {issueId: $routeParams.issueId})
   $scope.posts = comments.query()
+
+  labels = $resource(localStorage['repo_endpoint'] + "/issues/:issueId/labels",
+    {issueId: $routeParams.issueId})
+  $scope.labels = labels.query()
 
 angular.element(document).ready ->
 	angular.bootstrap document, ['issuesApp']
