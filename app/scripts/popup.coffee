@@ -34,7 +34,7 @@ issuesApp.controller 'IssuesListCtrl', ($scope, $rootScope, $resource, $routePar
   $scope.issues.$promise.then (issues) ->
     console.log issues
     chrome.browserAction.setBadgeText
-      text: issues.length
+      text: issues.length.toString()
 
 issuesApp.filter 'markdown', ($sanitize) ->
   (input) ->
