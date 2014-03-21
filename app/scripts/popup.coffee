@@ -41,7 +41,7 @@ issuesApp.filter 'markdown', ($sanitize) ->
       extensions: ['github']
     return converter.makeHtml((input))
 
-issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $animate) ->
+issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $animate, $http) ->
 
   States =
     open: 'open'
@@ -58,9 +58,17 @@ issuesApp.controller 'IssueDetailCtrl', ($scope, $resource, $routeParams, $anima
   $scope.toggleOpen = (issue) ->
     issue = $resource(localStorage['repo_endpoint'] + "/issues/:issueId",
       {issueId: $routeParams.issueId})
-    currentIssue = issue.get()
-    issue.patch
-      state: States.closed if currentIssue.state == States.open else States.open
+    issue.get().$promise.then (currentIssue) ->
+
+      updateIssue = $http
+        url: localStorage['repo_endpoint'] + "/issues/" + $routeParams.issueId
+        method: 'PATCH'
+        data:
+          tite: currentIssue.title
+          state: if currentIssue.state == States.open then States.closed else States.open
+
+      updateIssue.then (issue) ->
+        $scope.issue = issue.data
 
   comments = $resource(localStorage['repo_endpoint'] + "/issues/:issueId/comments",
     {issueId: $routeParams.issueId})
