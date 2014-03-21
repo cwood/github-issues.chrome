@@ -1,6 +1,6 @@
 {
     "name": "Github Issues for Chrome",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "manifest_version": 2,
     "description": "Github issues shows issues for a site you are working on.",
     "icons": {
