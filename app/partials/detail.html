@@ -2,7 +2,7 @@
 	<nav class='detail-bar'>
 		<ul>
 			<li class='back-button'><a href="/popup.html">Back</a></li>
-			<li class='toggle-state' ng-click="toggleOpen(issue)">{{issue.state}}</li>
+			<li class='toggle-state {{issue.state}}' ng-click="toggleOpen(issue)"><a href='#'>{{issue.state}}</a></li>
 			<li class='github-link'><a href="{{issue.html_url}}" ng-click='createTab(issue.html_url)'>Full Issue</a></li>
 		</ul>
 	</nav>
