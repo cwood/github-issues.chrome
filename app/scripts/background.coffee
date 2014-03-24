@@ -28,7 +28,6 @@ issuesBg.controller 'BackgroundCtrl', ($scope, $resource) ->
 
     searchResource.get().$promise.then (results) ->
       for result in results.items
-        console.log result.name
         if result.name.match(/\.\w+$/)
           console.log result.name
           localStorage['repo_full_name'] = result.full_name
