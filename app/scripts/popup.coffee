@@ -5,6 +5,9 @@ issuesApp = angular.module 'issuesApp', ['ngAnimate', 'ngSanitize', 'ngRoute', '
     $routeProvider.when '/popup.html',
       controller: "IssuesListCtrl"
       templateUrl: '/partials/list.html'
+    $routeProvider.when '/popup.html/closed',
+      controller: "ClosedIssuesListCtrl"
+      templateUrl: '/partials/list.html'
     $routeProvider.when '/popup.html/:issueId/',
       controller: "IssueDetailCtrl"
       templateUrl: "/partials/detail.html"
@@ -16,19 +19,24 @@ issuesApp = angular.module 'issuesApp', ['ngAnimate', 'ngSanitize', 'ngRoute', '
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/)
     $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + window.btoa(username + ':' + token)
 
-issuesApp.run ($rootScope) ->
-
-  chrome.tabs.query
-    active: true
-  , (tabs) ->
-
-    url = angular.element('<a />')
-    url.attr('href', tabs[0].url)
+issuesApp.run ($rootScope, $location) ->
     $rootScope.domain = localStorage['repo_full_name']
+
+    $rootScope.activeLink = (path) ->
+      return path == $location.path()
+
+issuesApp.controller 'ClosedIssuesListCtrl', ($scope, $resource, $animate) ->
+
+  closedIssues = $resource(localStorage['repo_endpoint'] + "/issues", {
+      state: "closed"
+  })
+  $scope.issues = closedIssues.query()
 
 issuesApp.controller 'IssuesListCtrl', ($scope, $rootScope, $resource, $routeParams, $animate, $location) ->
 
-  Issues = $resource(localStorage['repo_endpoint'] + "/issues")
+  Issues = $resource(localStorage['repo_endpoint'] + "/issues", {
+    state: 'open'
+  })
   $scope.issues = Issues.query()
 
   $scope.issues.$promise.then (issues) ->
