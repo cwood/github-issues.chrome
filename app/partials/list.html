@@ -1,16 +1,26 @@
-<input ng-model='titleSearch' type='text' placeholder='Filter with ...' class='search-input'></input>
+<input ng-model='titleSearch' type='text' placeholder='Search' class='search-input'></input>
 
-<table class='issues-list'>
-	<tr class='header'>
-		<th ng-click='filterWith = "number"'>#</th>
-		<th ng-click='filterWith = "title"'>Title</th>
-		<th ng-click='filterWidth = "user.name"'>User</th>
-		<th ng-click='filterWidth = "assignee.name"'>Assigned</th>
-	</tr>
-	<tr ng-repeat="issue in issues | orderBy: filterWith | filter: titleSearch" class='issue'>
-		<td class="number"><a ng-href="/popup.html/{{issue.number}}">{{issue.number}}</a></td>
-		<td class="title"><a ng-href="/popup.html/{{issue.number}}">{{issue.title}}</a></td>
-		<td class="reported-by"><img src="{{issue.user.avatar_url}}" /></td>
-		<td class="assigned-to reported-by"><img src="{{issue.assignee.avatar_url}}" /></td>
-	</tr>
-</table>
+<div class='issues-container'>
+	<ul class='tabs'>
+		<li class='tab' ng-class="{'is-active': activeLink('/popup.html')}">
+			<a href='/popup.html'>Open</a>
+		</li>
+		<li class='tab' ng-class="{'is-active': activeLink('/popup.html/closed')}">
+			<a href='/popup.html/closed'>Closed</a>
+		</li>
+	</ul>
+	<table class='issues-list'>
+		<tr class='header'>
+			<th ng-click='filterWith = "number"'>#</th>
+			<th ng-click='filterWith = "title"'>Title</th>
+			<th ng-click='filterWidth = "user.name"'>User</th>
+			<th ng-click='filterWidth = "assignee.name"'>Assigned</th>
+		</tr>
+		<tr ng-repeat="issue in issues | orderBy: filterWith | filter: titleSearch" class='issue'>
+			<td class="number"><a ng-href="/popup.html/{{issue.number}}">{{issue.number}}</a></td>
+			<td class="title"><a ng-href="/popup.html/{{issue.number}}">{{issue.title}}</a></td>
+			<td class="reported-by"><img ng-src="{{issue.user.avatar_url}}" /></td>
+			<td class="assigned-to reported-by"><img ng-src="{{issue.assignee.avatar_url}}" /></td>
+		</tr>
+	</table>
+</div>
