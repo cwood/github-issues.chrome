@@ -1,19 +1,20 @@
-issuesApp = angular.module 'issuesApp', ['ngAnimate', 'ngRoute', 'zj.namedRoutes', 'issues.controllers', 'issues.filters'], (
+issuesApp = angular.module 'issuesApp', ['ngRoute', 'zj.namedRoutes', 'issues.controllers', 'issues.filters'], (
     $routeProvider, $locationProvider, $httpProvider, $compileProvider
   ) ->
 
-    $routeProvider.when '/popup.html',
+    $routeProvider.when '/panes/dev-console.html',
       controller: "IssuesListCtrl"
       templateUrl: '/partials/list.html'
       name: 'root'
-    $routeProvider.when '/popup.html/closed',
+    $routeProvider.when '/panes/dev-console.html/closed',
       controller: "ClosedIssuesListCtrl"
       templateUrl: '/partials/list.html'
       name: 'closed'
-    $routeProvider.when '/popup.html/:issue/',
+    $routeProvider.when '/panes/dev-console.html/:issue/',
       controller: "IssueDetailCtrl"
       templateUrl: "/partials/detail.html"
       name: 'issue-detail'
+    $routeProvider.otherwise '/panes/dev-console.html'
 
     username = localStorage['username']
     token = localStorage['access_token']
